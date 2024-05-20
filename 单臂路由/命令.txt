@@ -1,0 +1,28 @@
+单臂路由-----作用：解决VLAN之间通讯问题，同时解决路由器接口不够用的问题
+需要注意：项目当中使用时，不同vlan之间需要不同网段的IP才能使用单臂路由，同网段的话无法设置相同IP和网关，导致无法使用。
+VLAN
+二层交换机不隔离广播
+ARP协议
+广播报文：询问谁是192.168.1.10，他的MAC是多少
+
+192.168.1.1
+192.168.1.10
+交换机配置
+Switch(config)#vlan 10
+Switch(config)#vlan 20
+Switch(config)#int f0/1
+Switch(config-if)#switchport access vlan 10
+Switch(config-if)#int f0/2
+Switch(config-if)#switchport access vlan 20
+Switch(config-if)#int f0/3
+Switch(config-if)#switchport mode trunk 
+Switch(config-if)#switchport trunk allowed vlan all 
+R1
+Router(config)#int g0/0/0
+Router(config-if)#no shut
+Router(config)#int g0/0/0.1
+Router(config-subif)#en dot1Q 10 表示该接口接受的VLAN ID
+Router(config-subif)#ip add 192.168.1.254 255.255.255.0
+Router(config-subif)#int g0/0/0.2
+Router(config-subif)#encapsulation dot1Q 20 表示该接口接受的VLAN ID
+Router(config-subif)#ip add 192.168.2.254 255.255.255.0
