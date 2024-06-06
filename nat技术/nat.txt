@@ -1,0 +1,9 @@
+
+Router(config)#int f0/0
+Router(config-if)#ip nat inside   设置内网接口
+Router(config-if)#int f0/1
+Router(config-if)#ip nat outside  设置外网接口
+Router(config-if)#exit
+Router(config)#ip nat pool abc 200.1.1.2 200.1.1.2 netmask 255.255.255.0    设置外网地址池，如果只有一个，起始IP和结束IP一致
+Router(config)#access-list 10 permit 192.168.1.0 0.0.0.255 	 设置内网中允许地址转换的IP地址范围
+Router(config)#ip nat inside source list 10 pool abc overload    设置NAT的转换前IP和转换后IP
